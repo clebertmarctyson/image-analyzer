@@ -1,12 +1,13 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const metadataBase =
   process.env.NODE_ENV === "production"
-    ? "https://image-analyzer-phi.vercel.app"
+    ? "https://image-analyzer.vercel.app"
     : "http://localhost:3000";
 
 export const metadata: Metadata = {
@@ -16,9 +17,9 @@ export const metadata: Metadata = {
     "Upload images and get instant AI-powered analysis. Our cutting-edge image recognition technology provides detailed descriptions and object identification in seconds.",
   keywords:
     "AI, image analysis, object recognition, machine learning, computer vision",
-  authors: [{ name: "Your Name or Company Name" }],
-  creator: "Your Name or Company Name",
-  publisher: "Your Name or Company Name",
+  authors: [{ name: "Marc Tyson CLEBERT" }],
+  creator: "Marc Tyson CLEBERT",
+  publisher: "Marc Tyson CLEBERT",
   openGraph: {
     title: "AI Image Analyzer | Instant Visual Recognition",
     description:
@@ -41,15 +42,38 @@ export const metadata: Metadata = {
     title: "AI Image Analyzer | Instant Visual Recognition",
     description:
       "Upload images and get instant AI-powered analysis. Discover what's in your photos with our advanced recognition technology.",
-    images: ["/logo.png"],
-    creator: "@yourTwitterHandle",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Image Analyzer Logo",
+      },
+    ],
+    creator: "@ClebertTyson",
   },
   icons: {
-    icon: [{ url: "/favicon.ico" }],
-    apple: [{ url: "/logo.png" }],
+    icon: [{ url: "/favicon.ico", sizes: "any" }],
+    apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.json",
-  robots: "index, follow",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: "google-site-verification-code-here",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export const viewport: Viewport = {
@@ -65,7 +89,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className="antialiased text-gray-900 bg-white dark:bg-black dark:text-white"
+        style={inter.style}
+      >
+        {children}
+      </body>
+      <Script
+        id="register-sw"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js');
+              });
+            }
+          `,
+        }}
+      />
     </html>
   );
 }

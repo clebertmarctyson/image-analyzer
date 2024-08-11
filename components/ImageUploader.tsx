@@ -125,20 +125,20 @@ export default function ImageUploader() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-8 transition-all duration-300 ease-in-out">
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-6 transition-all duration-300 ease-in-out">
       <Image
-        src={"/logo.png"}
-        alt="Logo"
+        src="/logo.png"
+        alt="AI Image Analyzer Logo"
         width={200}
         height={200}
-        priority
+        loading="eager"
         className="mx-auto"
       />
 
-      <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4">
+      <div className="flex justify-center space-x-4">
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300 ease-in-out"
+          className="flex items-center justify-center px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition-colors duration-300 ease-in-out"
         >
           <ArrowUpTrayIcon className="w-5 h-5 mr-2" />
           Upload Image
@@ -152,7 +152,7 @@ export default function ImageUploader() {
         />
         <button
           onClick={startCamera}
-          className="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
+          className="flex items-center justify-center px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition-colors duration-300 ease-in-out"
         >
           <CameraIcon className="w-5 h-5 mr-2" />
           Use Camera
@@ -169,7 +169,7 @@ export default function ImageUploader() {
           />
           <button
             onClick={capturePhoto}
-            className="mt-2 flex items-center justify-center px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors duration-300 ease-in-out absolute bottom-4 left-1/2 transform -translate-x-1/2"
+            className="mt-2 flex items-center justify-center px-4 py-2 bg-indigo-700 text-white rounded-md hover:bg-indigo-800 transition-colors duration-300 ease-in-out absolute bottom-4 left-1/2 transform -translate-x-1/2"
           >
             <PhotoIcon className="w-5 h-5 mr-2" />
             Capture Photo
@@ -194,7 +194,7 @@ export default function ImageUploader() {
               setImage(null);
               setAnalysis(null);
             }}
-            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+            className="absolute top-2 right-2 p-1 bg-red-700 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
           >
             <XMarkIcon className="w-4 h-4" />
           </button>
@@ -206,8 +206,8 @@ export default function ImageUploader() {
         disabled={!image || loading}
         className={`w-full flex items-center justify-center px-4 py-2 ${
           !image || loading
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-purple-500 hover:bg-purple-600"
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-purple-700 hover:bg-purple-800"
         } text-white rounded-md transition-colors duration-300 ease-in-out`}
       >
         {loading ? (
@@ -240,7 +240,7 @@ export default function ImageUploader() {
       </button>
 
       {error && (
-        <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-md">
+        <div className="mt-4 p-4 bg-red-100 text-red-800 rounded-md">
           <p>{error}</p>
         </div>
       )}

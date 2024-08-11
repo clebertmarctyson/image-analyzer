@@ -16,3 +16,45 @@
 .animate-fade-in {
   animation: fade-in 0.5s ease-out;
 }
+
+/* Improved default text colors for better contrast */
+body {
+  @apply text-gray-900 bg-gray-50;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply text-gray-800;
+}
+
+a {
+  @apply text-blue-700 hover:text-blue-800;
+}
+
+/* Ensure form inputs have sufficient contrast */
+input,
+textarea,
+select {
+  @apply border-gray-300 focus:border-blue-500 focus:ring-blue-500;
+}
+
+/* Improved button styles for better contrast */
+.btn {
+  @apply px-4 py-2 rounded-md transition-colors duration-300 ease-in-out;
+}
+
+.btn-primary {
+  @apply bg-blue-700 text-white hover:bg-blue-800;
+}
+
+.btn-secondary {
+  @apply bg-gray-600 text-white hover:bg-gray-700;
+}
+
+.btn-danger {
+  @apply bg-red-700 text-white hover:bg-red-800;
+}
