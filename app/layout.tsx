@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const metadataBase =
   process.env.NODE_ENV === "production"
-    ? "https://yourdomain.com"
+    ? "https://image-analyzer-phi.vercel.app"
     : "http://localhost:3000";
 
 export const metadata: Metadata = {
