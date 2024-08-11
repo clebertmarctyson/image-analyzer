@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(request: NextRequest) {
-  console.log("API route hit: /api/analyze");
-
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
@@ -39,16 +37,14 @@ export async function POST(request: NextRequest) {
       },
     ]);
 
-    const response = await result.response;
+    const response = result.response;
     const text = response.text();
-    console.log("Raw response:", text);
 
     let analysisResult;
     try {
       // Attempt to parse the response as JSON
       analysisResult = JSON.parse(text);
     } catch (parseError) {
-      console.error("Failed to parse response as JSON:", parseError);
       // If parsing fails, attempt to extract name and description from the text
       const nameMatch = text.match(/"name"\s*:\s*"([^"]+)"/);
       const descriptionMatch = text.match(/"description"\s*:\s*"([^"]+)"/);

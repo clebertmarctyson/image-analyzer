@@ -246,8 +246,8 @@ export default function ImageUploader() {
       )}
 
       {analysis && (
-        <div className="mt-6 p-6 bg-gray-50 rounded-lg shadow-inner space-y-4 animate-fade-in">
-          <h2 className="text-2xl font-bold text-gray-800">Analysis Results</h2>
+        <div className="mt-6 p-6 rounded-lg shadow-inner space-y-4 animate-fade-in bg-gray-100 text-gray-800">
+          <h2 className="text-2xl font-bold">Analysis Results</h2>
           <div className="space-y-2">
             <p className="text-lg">
               <span className="font-semibold">Name:</span> {analysis.name}
