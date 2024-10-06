@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { RefreshCw, Image as ImageIcon, Loader2 } from "lucide-react";
+import { RefreshCw, ImageIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { i } from "framer-motion/client";
+import Image from "next/image";
 
 interface ImagePreviewProps {
   image: string | null;
@@ -24,10 +24,12 @@ export default function ImagePreview({
   return (
     <div className="flex flex-col h-full">
       <div className="flex-grow relative overflow-hidden rounded-lg">
-        <img
+        <Image
           src={image}
           alt="Captured"
-          className="w-full h-full object-contain"
+          layout="fill"
+          objectFit="contain"
+          priority
         />
       </div>
       <div className="flex justify-between mt-4">

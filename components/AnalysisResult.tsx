@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -36,14 +36,16 @@ export default function AnalysisResult({
   );
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [isCopied, setIsCopied] = useState(false);
+  const plainTextRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = useCallback(() => {
-    if (analysis) {
-      navigator.clipboard.writeText(analysis);
+    if (plainTextRef.current) {
+      const plainText = plainTextRef.current.innerText;
+      navigator.clipboard.writeText(plainText);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     }
-  }, [analysis]);
+  }, []);
 
   const handleTranslate = useCallback(
     async (lang: string) => {
@@ -89,6 +91,13 @@ export default function AnalysisResult({
           >
             <div
               className="p-6 bg-white rounded-lg shadow-md prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: translatedAnalysis || analysis,
+              }}
+            />
+            <div
+              ref={plainTextRef}
+              className="sr-only"
               dangerouslySetInnerHTML={{
                 __html: translatedAnalysis || analysis,
               }}
