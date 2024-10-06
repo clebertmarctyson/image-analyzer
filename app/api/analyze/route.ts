@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     ];
 
     const result = await model.generateContent([
-      "Analyze this image and describe what you see. Include details about objects, people, activities, and the overall scene.",
+      "Analyze this image and describe what you see. Include details about objects, people, activities, and the overall scene. Structure your response using HTML tags for better formatting. Use <p> for paragraphs, <h3> for subheadings, and <ul> with <li> for lists.",
       ...imageParts,
     ]);
 

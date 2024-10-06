@@ -1,34 +1,69 @@
-import React from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AlertCircle, Copy, Check } from "lucide-react";
 
 interface AnalysisResultProps {
   analysis: string | null;
   error: string | null;
 }
 
-const AnalysisResult = ({ analysis, error }: AnalysisResultProps) => {
-  const structureAnalysis = (text: string) => {
-    const sections = text.split("\n\n");
-    return sections.map((section, index) => {
-      const [title, ...content] = section.split("\n");
-      return (
-        <div key={index} className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">{title}</h3>
-          {content.map((paragraph, pIndex) => (
-            <p key={pIndex} className="mb-2">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      );
-    });
-  };
+const languages = [
+  { code: "en", name: "English" },
+  { code: "es", name: "Spanish" },
+  { code: "fr", name: "French" },
+  { code: "de", name: "German" },
+  { code: "it", name: "Italian" },
+  { code: "ja", name: "Japanese" },
+  { code: "ko", name: "Korean" },
+  { code: "zh", name: "Chinese" },
+];
+
+export default function AnalysisResult({
+  analysis,
+  error,
+}: AnalysisResultProps) {
+  const [translatedAnalysis, setTranslatedAnalysis] = useState<string | null>(
+    null
+  );
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = useCallback(() => {
+    if (analysis) {
+      navigator.clipboard.writeText(analysis);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  }, [analysis]);
+
+  const handleTranslate = useCallback(
+    async (lang: string) => {
+      if (analysis) {
+        setSelectedLanguage(lang);
+        // Here you would typically call your translation API
+        // For this example, we'll just append a message
+        setTranslatedAnalysis(`<p>[Translated to ${lang}]</p>${analysis}`);
+      }
+    },
+    [analysis]
+  );
+
+  if (!analysis && !error) {
+    return null;
+  }
 
   return (
-    <>
-      <h2 className="text-2xl font-bold mb-4">Analysis Result</h2>
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold">Analysis Result</h2>
       <AnimatePresence>
         {error && (
           <motion.div
@@ -50,14 +85,43 @@ const AnalysisResult = ({ analysis, error }: AnalysisResultProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="mt-4 p-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg shadow-inner"
+            className="space-y-4"
           >
-            {structureAnalysis(analysis)}
+            <div
+              className="p-6 bg-white rounded-lg shadow-md prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: translatedAnalysis || analysis,
+              }}
+            />
+            <div className="flex justify-between items-center">
+              <Button
+                onClick={handleCopy}
+                variant="outline"
+                className="flex items-center"
+              >
+                {isCopied ? (
+                  <Check className="mr-2 h-4 w-4" />
+                ) : (
+                  <Copy className="mr-2 h-4 w-4" />
+                )}
+                {isCopied ? "Copied!" : "Copy Result"}
+              </Button>
+              <Select onValueChange={handleTranslate} value={selectedLanguage}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select language" />
+                </SelectTrigger>
+                <SelectContent>
+                  {languages.map((lang) => (
+                    <SelectItem key={lang.code} value={lang.code}>
+                      {lang.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
-};
-
-export default AnalysisResult;
+}

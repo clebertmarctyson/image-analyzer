@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import ImageUploader from "@/components/ImageUploader";
 import CameraCapture from "@/components/CameraCapture";
@@ -75,56 +75,70 @@ export default function ImageAnalyzer() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex flex-col md:flex-row items-stretch p-4 md:p-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex-1 md:mr-8"
-      >
-        <Card className="w-full h-full overflow-hidden">
-          <Header />
-          <CardContent className="p-6 space-y-6">
-            <Tabs
-              value={activeTab}
-              onValueChange={handleTabChange}
-              className="w-full"
+    <div className="min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex flex-col p-4">
+      <Card className="w-full max-w-3xl mx-auto overflow-hidden">
+        <Header />
+        <CardContent className="p-6">
+          <Tabs
+            value={activeTab}
+            onValueChange={handleTabChange}
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="upload">Upload</TabsTrigger>
+              <TabsTrigger value="camera">Camera</TabsTrigger>
+            </TabsList>
+            <TabsContent
+              value="upload"
+              className="h-[calc(100vh-300px)] min-h-[400px]"
             >
-              <TabsList className="grid w-full grid-cols-2 mb-4">
-                <TabsTrigger value="upload">Upload</TabsTrigger>
-                <TabsTrigger value="camera">Camera</TabsTrigger>
-              </TabsList>
-              <TabsContent value="upload">
-                <ImageUploader onImageCapture={handleImageCapture} />
-              </TabsContent>
-              <TabsContent value="camera">
-                <CameraCapture
-                  onImageCapture={handleImageCapture}
-                  isActive={isCameraActive}
+              {!image && <ImageUploader onImageCapture={handleImageCapture} />}
+              {image && (
+                <ImagePreview
+                  image={image}
+                  onRetake={handleRetake}
+                  onAnalyze={handleAnalyze}
+                  isLoading={isLoading}
                 />
-              </TabsContent>
-            </Tabs>
-            <ImagePreview
-              image={image}
-              onRetake={handleRetake}
-              onAnalyze={handleAnalyze}
-              isLoading={isLoading}
-            />
-          </CardContent>
-        </Card>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="flex-1 mt-8 md:mt-0 md:max-h-screen md:overflow-hidden"
-      >
-        <Card className="w-full h-full overflow-hidden flex flex-col">
-          <CardContent className="p-6 flex-grow overflow-y-auto">
-            <AnalysisResult analysis={analysis} error={error} />
-          </CardContent>
-        </Card>
-      </motion.div>
+              )}
+            </TabsContent>
+            <TabsContent
+              value="camera"
+              className="h-[calc(100vh-300px)] min-h-[400px]"
+            >
+              <CameraCapture
+                onImageCapture={handleImageCapture}
+                isActive={isCameraActive}
+              />
+              {image && (
+                <ImagePreview
+                  image={image}
+                  onRetake={handleRetake}
+                  onAnalyze={handleAnalyze}
+                  isLoading={isLoading}
+                />
+              )}
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+      <AnimatePresence>
+        {analysis && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
+            className="mt-8 w-full max-w-3xl mx-auto"
+          >
+            <Card className="w-full overflow-hidden">
+              <CardContent className="p-6">
+                <AnalysisResult analysis={analysis} error={error} />
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

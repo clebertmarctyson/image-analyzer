@@ -86,11 +86,11 @@ export default function CameraCapture({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col items-center justify-center h-full">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative aspect-video rounded-lg overflow-hidden bg-black"
+        className="relative w-full h-full rounded-lg overflow-hidden bg-black"
       >
         <video
           ref={videoRef}
@@ -99,7 +99,7 @@ export default function CameraCapture({
           className="w-full h-full object-cover"
         />
       </motion.div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mt-4 w-full">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button
             onClick={captureImage}
